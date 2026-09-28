@@ -10,12 +10,23 @@ MAX_LIVELLO = 3
 
 def dai_indizio(tentativo, codice):
     """Restituisce un indizio confrontando il tentativo con il codice segreto"""
-    # TODO
+    if tentativo < codice:
+        return "Più alto"
+    else:
+        return "Più basso"
 
 
 def stampa_tentativi(n, usati):
     """Stampa la riga dei tentativi: O = disponibile, X = già usato"""
-    # TODO
+    simboli = []
+    for i in range(6): # Va da 0 a 5.
+        if i < usati:
+            simboli.append("X")
+        else:
+            simboli.append("0")
+    for s in simboli:
+        print(s, end=" ")
+    print()
 
 
 def gestisci_livello(livello):
@@ -32,11 +43,30 @@ def gestisci_livello(livello):
     if n < TENTATIVI_MIN:
         n = TENTATIVI_MIN
 
-    codice = random.randint(CODICE_MIN, CODICE_MAX)
-    usati = 0
+    codice = random.randint(CODICE_MIN, CODICE_MAX) # Codice da indovinare per questo livello.
+    usati = 0 # Numero di tentativi usati in questo livello finora.
 
-    # TODO
+    print()
+    print(f"Livello {livello}) {n} tentativi")
 
+    while usati < n:
+        stampa_tentativi(n, usati)
+
+        stringa = input("Tentativo: ")
+        numero = int(stringa)
+
+        if numero < CODICE_MIN or numero > CODICE_MAX:
+            print(f"Il codice deve essere tra {CODICE_MIN} e {CODICE_MAX}")
+            usati = usati + 1
+        elif numero == codice:
+            print(f"Accesso consentito!")
+            return True
+        else: # Sono nell'intervallo, ma il codice non è corretto.
+            usati = usati + 1
+            print(dai_indizio(numero, codice))
+
+    print("GAME OVER: tentativi esauriti!")
+    return False
 
 def main():
     print("=== Benvenuto in Vault Code ===")
